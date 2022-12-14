@@ -1,33 +1,9 @@
 const {Router} = require('express')
 
 // Decorator you'd apply to a controller class method specifying it as a post
-function post(path){
+function route(path, method){
     return function(target) {
-        target.constructor.prototype.method = "post"
-        target.constructor.prototype.path = path
-    }
-}
-
-// Decorator you'd apply to a controller class method specifying it as a get
-function get(path){
-    return function(target) {
-        target.constructor.prototype.method = "get"
-        target.constructor.prototype.path = path
-    }
-}
-
-// Decorator you'd apply to a controller class method specifying it as a patch
-function patch(path){
-    return function(target) {
-        target.constructor.prototype.method = "patch"
-        target.constructor.prototype.path = path
-    }
-}
-
-// Decorator you'd apply to a controller class method specifying it as a delete
-function del(path){
-    return function(target) {
-        target.constructor.prototype.method = "delete"
+        target.constructor.prototype.method = method
         target.constructor.prototype.path = path
     }
 }
@@ -38,7 +14,7 @@ class OlogyRouter {
     constructor(path) {
         this.router = Router()
 
-        this.path = `/api/${path}`
+        this.path = `/api/${path.replace('/', '')}`
 
         this.register()
     }
@@ -53,4 +29,4 @@ class OlogyRouter {
     }
 }
 
-module.exports = { OlogyRouter, post, get, del, patch }
+module.exports = { OlogyRouter, route }
